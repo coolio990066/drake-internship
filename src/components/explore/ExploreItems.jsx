@@ -1,20 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AuthorImage from "../../images/author_thumbnail.jpg";
 import nftImage from "../../images/nftImage.jpg";
+import useFetch from "../UI/apiFetch";
+import CountdownTimer from "../UI/countdownTimer";
 
 const ExploreItems = () => {
+  const { data, loading } = useFetch("https://us-central1-nft-cloud-functions.cloudfunctions.net/explore");
+  const [visibleItems, setVisibleItems] = useState(8);
+  const [filteredData, setFilteredData] = useState([]);
+
+  const loadMore = () => {
+    setVisibleItems(prevVisible => prevVisible + 4);
+  };
+
+  const handleFilterChange = (event) => {
+    const filterValue = event.target.value;
+    
+    if (!data) return;
+
+    let sorted = [...data];
+
+    switch(filterValue) {
+      case "price_low_to_high":
+        sorted.sort((a, b) => a.price - b.price);
+        break;
+      case "price_high_to_low":
+        sorted.sort((a, b) => b.price - a.price);
+        break;
+      case "likes_high_to_low":
+        sorted.sort((a, b) => b.likes - a.likes);
+        break;
+      default:
+        sorted = data;
+    }
+
+    setFilteredData(sorted);
+    setVisibleItems(8);
+  };
+
+  const displayData = filteredData.length > 0 ? filteredData : data;
+
   return (
     <>
       <div>
-        <select id="filter-items" defaultValue="">
+        <select id="filter-items" defaultValue="" onChange={handleFilterChange}>
           <option value="">Default</option>
           <option value="price_low_to_high">Price, Low to High</option>
           <option value="price_high_to_low">Price, High to Low</option>
           <option value="likes_high_to_low">Most liked</option>
         </select>
       </div>
-      {new Array(8).fill(0).map((_, index) => (
+      {displayData && displayData.slice(0, visibleItems).map((explore, index) => (
         <div
           key={index}
           className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
@@ -23,15 +60,15 @@ const ExploreItems = () => {
           <div className="nft__item">
             <div className="author_list_pp">
               <Link
-                to="/author"
+                to={`/author/${explore.authorId}`}
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
               >
-                <img className="lazy" src={AuthorImage} alt="" />
+                <img className="lazy" src={explore.authorImage} alt="" />
                 <i className="fa fa-check"></i>
               </Link>
             </div>
-            <div className="de_countdown">5h 30m 32s</div>
+            <CountdownTimer expiryDate={explore.expiryDate} />
 
             <div className="nft__item_wrap">
               <div className="nft__item_extra">
@@ -52,27 +89,29 @@ const ExploreItems = () => {
                 </div>
               </div>
               <Link to="/item-details">
-                <img src={nftImage} className="lazy nft__item_preview" alt="" />
+                <img src={explore.nftImage} className="lazy nft__item_preview" alt="" />
               </Link>
             </div>
             <div className="nft__item_info">
               <Link to="/item-details">
-                <h4>Pinky Ocean</h4>
+                <h4>{explore.title}</h4>
               </Link>
-              <div className="nft__item_price">1.74 ETH</div>
+              <div className="nft__item_price">{explore.price} ETH</div>
               <div className="nft__item_like">
                 <i className="fa fa-heart"></i>
-                <span>69</span>
+                <span>{explore.likes}</span>
               </div>
             </div>
           </div>
         </div>
       ))}
-      <div className="col-md-12 text-center">
-        <Link to="" id="loadmore" className="btn-main lead">
-          Load more
-        </Link>
-      </div>
+      {displayData && visibleItems < displayData.length && (
+        <div className="col-md-12 text-center">
+          <button onClick={loadMore} id="loadmore" className="btn-main lead">
+            Load more
+          </button>
+        </div>
+      )}
     </>
   );
 };

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
-import useFetch from "../apiFetch";
+import useFetch from "../UI/apiFetch";
 
 function HotCollections() {
   const { data, loading } = useFetch("https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections");
