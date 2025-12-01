@@ -45,7 +45,7 @@ const CountdownTimer = ({ expiryDate }) => {
 };
 
 function NewItems() {
-  const { data, loading, error } = useFetch("https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems");
+  const { data, loading,} = useFetch("https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems");
   
   const options = {
     loop: true,
