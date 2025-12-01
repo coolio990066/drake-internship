@@ -4,6 +4,7 @@ import AuthorImage from "../../images/author_thumbnail.jpg";
 import nftImage from "../../images/nftImage.jpg";
 import useFetch from "../UI/apiFetch";
 import CountdownTimer from "../UI/countdownTimer";
+import Skeleton from "../UI/Skeleton";
 
 const ExploreItems = () => {
   const [filterValue, setFilterValue] = useState("");
@@ -34,13 +35,24 @@ const ExploreItems = () => {
           <option value="likes_high_to_low">Most liked</option>
         </select>
       </div>
-      {data && data.slice(0, visibleItems).map((explore, index) => (
-        <div
-          key={index}
-          className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
-          style={{ display: "block", backgroundSize: "cover" }}
-        >
-          <div className="nft__item">
+      {loading ? (
+        new Array(8).fill(0).map((_, index) => (
+          <div
+            key={index}
+            className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
+            style={{ display: "block", backgroundSize: "cover" }}
+          >
+            <Skeleton width="100%" height="400px" />
+          </div>
+        ))
+      ) : (
+        data && data.slice(0, visibleItems).map((explore, index) => (
+          <div
+            key={index}
+            className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
+            style={{ display: "block", backgroundSize: "cover" }}
+          >
+            <div className="nft__item">
             <div className="author_list_pp">
               <Link
                 to={`/author/${explore.authorId}`}
@@ -87,8 +99,9 @@ const ExploreItems = () => {
             </div>
           </div>
         </div>
-      ))}
-      {data && visibleItems < data.length && (
+        ))
+      )}
+      {!loading && data && visibleItems < data.length && (
         <div className="col-md-12 text-center">
           <button onClick={loadMore} id="loadmore" className="btn-main lead">
             Load more
