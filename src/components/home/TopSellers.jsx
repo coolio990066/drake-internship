@@ -1,12 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import AuthorImage from "../../images/author_thumbnail.jpg";
-import useFetch from "../apiFetch";
+import useFetch from "../UI/apiFetch";
 
 const TopSellers = () => {
   const { data, loading,} = useFetch("https://us-central1-nft-cloud-functions.cloudfunctions.net/topSellers");
   
-  console.log("TopSellers data:", data);
   
   return (
     <section id="section-popular" className="pb-5">
