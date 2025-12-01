@@ -6,40 +6,23 @@ import useFetch from "../UI/apiFetch";
 import CountdownTimer from "../UI/countdownTimer";
 
 const ExploreItems = () => {
-  const { data, loading } = useFetch("https://us-central1-nft-cloud-functions.cloudfunctions.net/explore");
+  const [filterValue, setFilterValue] = useState("");
   const [visibleItems, setVisibleItems] = useState(8);
-  const [filteredData, setFilteredData] = useState([]);
+  
+  const apiUrl = filterValue 
+    ? `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore?filter=${filterValue}`
+    : "https://us-central1-nft-cloud-functions.cloudfunctions.net/explore";
+  
+  const { data, loading } = useFetch(apiUrl);
 
   const loadMore = () => {
     setVisibleItems(prevVisible => prevVisible + 4);
   };
 
   const handleFilterChange = (event) => {
-    const filterValue = event.target.value;
-    
-    if (!data) return;
-
-    let sorted = [...data];
-
-    switch(filterValue) {
-      case "price_low_to_high":
-        sorted.sort((a, b) => a.price - b.price);
-        break;
-      case "price_high_to_low":
-        sorted.sort((a, b) => b.price - a.price);
-        break;
-      case "likes_high_to_low":
-        sorted.sort((a, b) => b.likes - a.likes);
-        break;
-      default:
-        sorted = data;
-    }
-
-    setFilteredData(sorted);
+    setFilterValue(event.target.value);
     setVisibleItems(8);
   };
-
-  const displayData = filteredData.length > 0 ? filteredData : data;
 
   return (
     <>
@@ -51,7 +34,7 @@ const ExploreItems = () => {
           <option value="likes_high_to_low">Most liked</option>
         </select>
       </div>
-      {displayData && displayData.slice(0, visibleItems).map((explore, index) => (
+      {data && data.slice(0, visibleItems).map((explore, index) => (
         <div
           key={index}
           className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
@@ -105,7 +88,7 @@ const ExploreItems = () => {
           </div>
         </div>
       ))}
-      {displayData && visibleItems < displayData.length && (
+      {data && visibleItems < data.length && (
         <div className="col-md-12 text-center">
           <button onClick={loadMore} id="loadmore" className="btn-main lead">
             Load more
