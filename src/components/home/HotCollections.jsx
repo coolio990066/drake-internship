@@ -1,33 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import AuthorImage from "../../images/author_thumbnail.jpg";
-import nftImage from "../../images/nftImage.jpg";
-import axios from "axios";
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
+import useFetch from "../apiFetch";
 
-
-const HotCollections = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections");
-        console.log("API Response:", response.data);
-        setData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError(error);
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []); //empty dependency array to run only once on mount
+function HotCollections() {
+  const { data, loading } = useFetch("https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections");
 
   const options = {
     loop: true,
@@ -35,13 +14,13 @@ const HotCollections = () => {
     nav: true,
     dots: false,
     responsive: {
-      400: {
+      0: {
         items: 1
       },
-      850: {
+      450: {
         items: 2
       },
-      1150: {
+      950: {
         items: 3
       },
       1400: {
@@ -83,7 +62,7 @@ const HotCollections = () => {
               </OwlCarousel>
             ) : (
               <OwlCarousel className="owl-theme" key="loaded" {...options}>
-                {data.map((collection) => (
+                {data && data.map((collection) => (
                   <div key={collection.id}>
                     <div className="nft_coll">
                       <div className="nft_wrap">
@@ -92,7 +71,7 @@ const HotCollections = () => {
                         </Link>
                       </div>
                       <div className="nft_coll_pp">
-                        <Link to="/author">
+                        <Link to={`/author/${collection.authorId}`}>
                           <img className="lazy pp-coll" src={collection.authorImage} alt="" />
                         </Link>
                         <i className="fa fa-check"></i>
