@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import AuthorImage from "../../images/author_thumbnail.jpg";
-import nftImage from "../../images/nftImage.jpg";
 import useFetch from "../UI/apiFetch";
 import CountdownTimer from "../UI/countdownTimer";
 import Skeleton from "../UI/Skeleton";
@@ -10,9 +8,11 @@ const ExploreItems = () => {
   const [filterValue, setFilterValue] = useState("");
   const [visibleItems, setVisibleItems] = useState(8);
   
-  const apiUrl = filterValue 
-    ? `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore?filter=${filterValue}`
-    : "https://us-central1-nft-cloud-functions.cloudfunctions.net/explore";
+  const apiUrl = useMemo(() => 
+    filterValue 
+      ? `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore?filter=${filterValue}`
+      : "https://us-central1-nft-cloud-functions.cloudfunctions.net/explore"
+  , [filterValue]);
   
   const { data, loading } = useFetch(apiUrl);
 
@@ -50,7 +50,11 @@ const ExploreItems = () => {
           <div
             key={index}
             className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
-            style={{ display: "block", backgroundSize: "cover" }}
+            style={{ 
+              display: "block", 
+              backgroundSize: "cover",
+              animation: `fadeIn 0.8s ease-in ${index * 0.1}s both`
+            }}
           >
             <div className="nft__item">
             <div className="author_list_pp">
@@ -83,12 +87,12 @@ const ExploreItems = () => {
                   </div>
                 </div>
               </div>
-              <Link to="/item-details">
+              <Link to={`/item-details/${explore.nftId}`}>
                 <img src={explore.nftImage} className="lazy nft__item_preview" alt="" />
               </Link>
             </div>
             <div className="nft__item_info">
-              <Link to="/item-details">
+              <Link to={`/item-details/${explore.nftId}`}>
                 <h4>{explore.title}</h4>
               </Link>
               <div className="nft__item_price">{explore.price} ETH</div>

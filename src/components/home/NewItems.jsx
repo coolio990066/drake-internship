@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import useFetch from "../UI/apiFetch";
 import OwlCarousel from "react-owl-carousel";
 import CountdownTimer from "../UI/countdownTimer";
+import Skeleton from "../UI/Skeleton";
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 
@@ -32,6 +33,7 @@ function NewItems() {
   
   
   return (
+    <div data-aos="fade-up">
     <section id="section-items" className="no-bottom">
       <div className="container">
         <div className="row">
@@ -47,15 +49,17 @@ function NewItems() {
                 <div key={index} style={{ maxWidth: "350px", margin: "0 auto" }}>
                   <div className="nft__item">
                     <div className="author_list_pp">
-                      <div style={{ width: "50px", height: "50px", backgroundColor: "#e0e0e0", borderRadius: "50%" }}></div>
+                      <Skeleton width="50px" height="50px" borderRadius="50%" />
                     </div>
-                    <div className="de_countdown" style={{ backgroundColor: "#e0e0e0", height: "20px", width: "100px" }}></div>
+                    <div className="de_countdown">
+                      <Skeleton width="100px" height="20px" borderRadius="4px" />
+                    </div>
                     <div className="nft__item_wrap">
-                      <div style={{ width: "100%", height: "300px", backgroundColor: "#e0e0e0" }}></div>
+                      <Skeleton width="100%" height="300px" borderRadius="8px" />
                     </div>
                     <div className="nft__item_info">
-                      <h4 style={{ backgroundColor: "#e0e0e0", height: "20px", width: "60%" }}></h4>
-                      <div style={{ backgroundColor: "#e0e0e0", height: "15px", width: "40%", marginTop: "10px" }}></div>
+                      <Skeleton width="60%" height="20px" borderRadius="4px" />
+                      <Skeleton width="40%" height="15px" borderRadius="4px" />
                     </div>
                   </div>
                 </div>
@@ -98,7 +102,7 @@ function NewItems() {
                     </div>
                   </div>
 
-                  <Link to="/item-details">
+                  <Link to={`/item-details/${newItems.nftId}`}>
                     <img
                       src={newItems.nftImage}
                       className="lazy nft__item_preview"
@@ -108,7 +112,7 @@ function NewItems() {
                   </Link>
                 </div>
                 <div className="nft__item_info">
-                  <Link to="/item-details">
+                  <Link to={`/item-details/${newItems.nftId}`}>
                     <h4>{newItems.title}</h4>
                   </Link>
                   <div className="nft__item_price">{newItems.price} ETH</div>
@@ -125,6 +129,7 @@ function NewItems() {
         </div>
       </div>
     </section>
+   </div>
   );
 };
 
