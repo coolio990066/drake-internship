@@ -4,6 +4,7 @@ import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import useFetch from "../UI/apiFetch";
+import Skeleton from "../UI/Skeleton";
 
 function HotCollections() {
   const { data, loading } = useFetch("https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections");
@@ -46,15 +47,15 @@ function HotCollections() {
                   <div key={index}>
                     <div className="nft_coll">
                       <div className="nft_wrap">
-                        <div className="lazy img-fluid" style={{ height: "200px", backgroundColor: "#e0e0e0" }}></div>
+                        <Skeleton width="100%" height="200px" borderRadius="8px" />
                       </div>
                       <div className="nft_coll_pp">
-                        <div className="lazy pp-coll" style={{ width: "50px", height: "50px", backgroundColor: "#e0e0e0", borderRadius: "50%" }}></div>
+                        <Skeleton width="50px" height="50px" borderRadius="50%" />
                         <i className="fa fa-check"></i>
                       </div>
                       <div className="nft_coll_info">
-                        <h4>Loading...</h4>
-                        <span>...</span>
+                        <Skeleton width="120px" height="20px" borderRadius="4px" />
+                        <Skeleton width="80px" height="16px" borderRadius="4px" />
                       </div>
                     </div>
                   </div>
@@ -66,7 +67,7 @@ function HotCollections() {
                   <div key={collection.id}>
                     <div className="nft_coll">
                       <div className="nft_wrap">
-                        <Link to="/item-details">
+                        <Link to={`/item-details/${collection.nftId}`}>
                           <img src={collection.nftImage} className="lazy img-fluid" alt="" />
                         </Link>
                       </div>
@@ -77,7 +78,7 @@ function HotCollections() {
                         <i className="fa fa-check"></i>
                       </div>
                       <div className="nft_coll_info">
-                        <Link to="/explore">
+                        <Link to={`/explore?collection=${collection.id}`}>
                           <h4>{collection.title}</h4>
                         </Link>
                         <span>ERC-{collection.code}</span>
