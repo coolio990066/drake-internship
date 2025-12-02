@@ -8,6 +8,7 @@ const TopSellers = () => {
   
   
   return (
+    <div data-aos="fade-up">
     <section id="section-popular" className="pb-5">
       <div className="container">
         <div className="row">
@@ -64,6 +65,7 @@ const TopSellers = () => {
         </div>
       </div>
     </section>
+    </div>
   );
 };
 

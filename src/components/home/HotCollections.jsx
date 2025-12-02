@@ -31,6 +31,7 @@ function HotCollections() {
   };
 
   return (
+    <div data-aos="fade-up">
     <section id="section-collections" className="no-bottom">
       <div className="container">
         <div className="row">
@@ -92,6 +93,7 @@ function HotCollections() {
         </div>
       </div>
     </section>
+    </div>
   );
 };
 

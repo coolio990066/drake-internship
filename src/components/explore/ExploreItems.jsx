@@ -50,7 +50,11 @@ const ExploreItems = () => {
           <div
             key={index}
             className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
-            style={{ display: "block", backgroundSize: "cover" }}
+            style={{ 
+              display: "block", 
+              backgroundSize: "cover",
+              animation: `fadeIn 0.8s ease-in ${index * 0.1}s both`
+            }}
           >
             <div className="nft__item">
             <div className="author_list_pp">

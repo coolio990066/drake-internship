@@ -33,6 +33,7 @@ function NewItems() {
   
   
   return (
+    <div data-aos="fade-up">
     <section id="section-items" className="no-bottom">
       <div className="container">
         <div className="row">
@@ -128,6 +129,7 @@ function NewItems() {
         </div>
       </div>
     </section>
+   </div>
   );
 };
 
