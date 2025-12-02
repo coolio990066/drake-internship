@@ -3,12 +3,16 @@ import EthImage from "../images/ethereum.svg";
 import { Link } from "react-router-dom";
 import AuthorImage from "../images/author_thumbnail.jpg";
 import nftImage from "../images/nftImage.jpg";
+import useFetch from "../components/UI/apiFetch";
 
 const ItemDetails = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const { data, loading} = useFetch(
+    `https://us-central1-nft-cloud-functions.cloudfunctions.net/nfts?nftId=123`
+  )
   return (
     <div id="wrapper">
       <div className="no-bottom no-top" id="content">
